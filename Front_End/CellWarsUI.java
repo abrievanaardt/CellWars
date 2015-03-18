@@ -72,7 +72,7 @@ public class CellWarsUI extends javax.swing.JFrame {
                        
                     }
                 });
-       
+        this.updateUI(board);
     }
     
     private void updateUI(Board board){
