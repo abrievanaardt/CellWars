@@ -31,6 +31,7 @@ public class Blanket
         
         Iterator mergerIter = mergerCells.iterator();
         
+        //add all the cells in the merger blanket to this blanket's cell list
         while(mergerIter.hasNext())
         {
             coveredCells.add((Cell) mergerIter.next());
@@ -67,8 +68,15 @@ public class Blanket
     
     public Boolean touches(Blanket blanket)
     {
-        //implement
+        Coordinate thisBotLeft = new Coordinate(topLeft.getX(), bottomRight.getY());
+        Coordinate thisTopRight = new Coordinate(bottomRight.getX(), topLeft.getY());
+        
+        Coordinate otherBotLeft = new Coordinate(blanket.topLeft.getX(), blanket.bottomRight.getY());
+        Coordinate otherTopRight = new Coordinate(blanket.bottomRight.getX(), blanket.topLeft.getY());
+        
+        
         return true;
+        
     }
     
      /**
