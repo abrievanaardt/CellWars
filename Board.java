@@ -229,9 +229,12 @@ public class Board
     {
         for (Cell cell : cells) 
         {
-            if (cell.getCoordinate().equals(to)) 
+            if(cell != null)
             {
-                return true;
+                if (cell.getCoordinate().equals(to)) 
+                {
+                    return true;
+                }
             }
         }
         
