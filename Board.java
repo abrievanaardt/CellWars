@@ -302,6 +302,7 @@ public class Board
             Blanket blanketOne;
             Blanket blanketTwo;
             
+            
             while(iterBlankOne.hasNext())
             {
                 blanketOne = (Blanket) iterBlankOne.next();
@@ -317,7 +318,11 @@ public class Board
                             didMerge = true;
                         }
                     }
+                    if (didMerge)
+                        break;
                 }
+                if(didMerge)
+                    break;
             }
         }
     }
