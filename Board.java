@@ -17,13 +17,15 @@ public class Board
     private final int totCellCount;
     private Coordinate activeFrom;
     private Coordinate activeTo;
+    private final CellWarsUI GUI;
     
     /**
      * Constructor to initialise the dimensions, totCellCount, Cell array and Blanket array
+     * @param ui User interface object used to display the board state
      * @param _dimensions the number of rows and columns of the board specified by the user
      * @param _CellCount  the number of cells of each player as specified by the user
      */
-    public Board(int _dimensions, int _CellCount)
+    public Board(CellWarsUI ui, int _dimensions, int _CellCount)
     {
         dimensions = _dimensions;
         totCellCount = _CellCount * 2;
@@ -31,6 +33,7 @@ public class Board
         blankets = new ArrayList<Blanket>();
         activeFrom = null;
         activeTo = null;
+        GUI = ui;
     }
     
     /**
@@ -160,16 +163,17 @@ public class Board
     public void move(Coordinate from, Coordinate to)
     {
         if(!isWithinLimit(from,to) || isOccupied(to) || !isInBoundaries(to) || !isStraight(from,to))
-        {
-            //something
             return;
-        }
         
         Cell cell = getCell(from);
+        
         //change coordinates
         cell.setCoordinate(to.getX(), to.getY());
         
         identifyBlankets();
+        //capture cells
+        
+        GUI.updateUI(this);
         
         activeFrom = null;
         activeTo = null;

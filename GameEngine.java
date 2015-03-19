@@ -13,7 +13,8 @@ public class GameEngine {
     }
     
     public void startGame(){
-        Board board = new Board(DIMENSIONS, CELLS_PER_PLAYER);
+        Board board = new Board(ui, DIMENSIONS, CELLS_PER_PLAYER);
+        board.initialiseBoard();
         ui.initiliaseUI(board);        
     }
     

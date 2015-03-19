@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.event.MouseEvent;
+import java.util.Iterator;
 
 /**
  *
@@ -13,9 +14,9 @@ public class CellWarsUI extends javax.swing.JFrame {
      */    
     public CellWarsUI(int _dimensions, int _totCellCount, int _gameMode) {
         initComponents();
-        GAME_MODE = _dimensions;
-        DIMENSIONS = _totCellCount;
-        TOT_CELL_COUNT = _gameMode;
+        GAME_MODE = _gameMode;
+        DIMENSIONS = _dimensions;
+        TOT_CELL_COUNT = _totCellCount;
         cells = new CellComponent[DIMENSIONS][DIMENSIONS];
         this.setSize(getInsets().left + getInsets().right + CELL_WIDTH*DIMENSIONS,
              getInsets().top + getInsets().bottom + CELL_HEIGHT*DIMENSIONS);
@@ -39,14 +40,38 @@ public class CellWarsUI extends javax.swing.JFrame {
                     public void mouseClicked(MouseEvent e) {
                         int xIndex = (e.getX()- getInsets().left)/CELL_WIDTH;
                         int yIndex = (e.getY()- getInsets().top)/CELL_HEIGHT;  
-                        System.out.println(xIndex + " " + yIndex);
                         b.acceptCoordinate(new Coordinate(xIndex, yIndex));                        
                     }                    
                 });
         this.updateUI(board);
     }
     
-    private void updateUI(Board board){
+    public void updateUI(Board board){
+        Iterator blanketIterator = board.getBlankets().iterator();
+        Blanket currentBlanket;
+        
+        while (blanketIterator.hasNext()){
+           currentBlanket =  (Blanket) blanketIterator.next();
+           for (int i = currentBlanket.getTopLeft().getX(); i < currentBlanket.getBottomRight().getX(); ++i){
+               for (int j = currentBlanket.getTopLeft().getY(); j < currentBlanket.getBottomRight().getY(); ++j){ 
+                    if (currentBlanket.getOwner().equals("p1"))
+                        cells[i][j].setBackground(PLAYER1_BLANKET_COLOUR);
+                    else
+                        cells[i][j].setBackground(PLAYER2_BLANKET_COLOUR);
+               }
+           }
+        }
+        
+        for (Cell cell: board.getCells()){
+            Coordinate cellCoordinate = cell.getCoordinate();
+            int xIndex = cellCoordinate.getX();
+            int yIndex = cellCoordinate.getY();
+            
+            if (cell.getOwner().equals("p1"))
+                cells[xIndex][yIndex].setBackground(PLAYER1_CELL_COLOUR);
+            else
+                cells[xIndex][yIndex].setBackground(PLAYER2_CELL_COLOUR);
+        }
         
     }   
     
@@ -80,6 +105,12 @@ public class CellWarsUI extends javax.swing.JFrame {
     private final int TOT_CELL_COUNT;
     private final int CELL_HEIGHT = 100;
     private final int CELL_WIDTH = 200;
+    private final Color PLAYER1_CELL_COLOUR = Color.MAGENTA;
+    private final Color PLAYER1_BLANKET_COLOUR = Color.PINK;
+    private final Color PLAYER2_CELL_COLOUR = Color.BLUE;
+    private final Color PLAYER2_BLANKET_COLOUR = Color.LIGHT_GRAY;
+    private final Color BLEND_COLOUR = Color.YELLOW;
+    
     private CellComponent[][] cells;
    
     // Variables declaration - do not modify//GEN-BEGIN:variables

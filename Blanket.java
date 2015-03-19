@@ -122,6 +122,15 @@ public class Blanket
     }
     
     /**
+     * Function to get the owner of the blanket
+     * @return String describing the owner
+     */
+    public String getOwner()
+    {
+        return owner;
+    }
+    
+    /**
      * Function to return the variable of type ArrayList called coveredCells
      * @return the coveredCells arrayList
      */
