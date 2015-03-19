@@ -141,7 +141,6 @@ public class Board
      */
     public void acceptCoordinate(Coordinate coord)
     {
-        
         if(getCell(coord) != null)
         {
             activeFrom = coord;
@@ -176,8 +175,7 @@ public class Board
         GUI.updateUI(this);
         
         activeFrom = null;
-        activeTo = null;
-        
+        activeTo = null;        
         
     }
     
@@ -284,86 +282,59 @@ public class Board
             if(!cell.isMarked())
             {
                 cell.addNeighboursToBlanket(cells, blank);
-            }
             
-            Iterator coveredCells = blank.getCoveredCells().iterator();
-            //set all the cells' limits to the new number of cells under this blanket
-            while(coveredCells.hasNext())
-            {
-                Cell temp = (Cell) coveredCells.next();
-                temp.setMaxMoveLimit(blank.getCoveredCells().size());
-            }
-            
-            //determine new blanket size (coordinates)
-            Iterator cellsIter = blank.getCoveredCells().iterator();
-            int bottomRightX = -1;
-            int bottomRightY = -1;
-            int topLeftX = dimensions;
-            int topLeftY = dimensions;                    
-            int cellTopLeftX;
-            int cellTopLeftY;
-            int cellBottomRightX;
-            int cellBottomRightY;
-                    
-            Cell currentCell;
-            while (cellsIter.hasNext())
-            {
-                currentCell = (Cell) cellsIter.next();
-                cellTopLeftX = currentCell.getCoordinate().getX() == 0 ? 0 : currentCell.getCoordinate().getX()-1;
-                cellTopLeftY = currentCell.getCoordinate().getY() == 0 ? 0 : currentCell.getCoordinate().getY()-1;
-                cellBottomRightX = currentCell.getCoordinate().getX() == dimensions-1 ? dimensions-1 : currentCell.getCoordinate().getX()+1;
-                cellBottomRightY = currentCell.getCoordinate().getY() == dimensions-1 ? dimensions-1 : currentCell.getCoordinate().getY()+1;
+                //determine new blanket size (coordinates)
+                Iterator cellsIter = blank.getCoveredCells().iterator();
+                int bottomRightX = -1;
+                int bottomRightY = -1;
+                int topLeftX = dimensions;
+                int topLeftY = dimensions;                    
+                int cellTopLeftX;
+                int cellTopLeftY;
+                int cellBottomRightX;
+                int cellBottomRightY;
 
-                bottomRightX = Math.max(cellBottomRightX, bottomRightX);
-                bottomRightY = Math.max(cellBottomRightY, bottomRightY);
+                Cell currentCell;
+                while (cellsIter.hasNext())
+                {
+                    currentCell = (Cell) cellsIter.next();
+                    cellTopLeftX = currentCell.getCoordinate().getX() == 0 ? 0 : currentCell.getCoordinate().getX()-1;
+                    cellTopLeftY = currentCell.getCoordinate().getY() == 0 ? 0 : currentCell.getCoordinate().getY()-1;
+                    cellBottomRightX = currentCell.getCoordinate().getX() == dimensions-1 ? dimensions-1 : currentCell.getCoordinate().getX()+1;
+                    cellBottomRightY = currentCell.getCoordinate().getY() == dimensions-1 ? dimensions-1 : currentCell.getCoordinate().getY()+1;
 
-                topLeftX = Math.min(cellTopLeftX, topLeftX);
-                topLeftY = Math.min(cellTopLeftY, topLeftY);
-            }
-            
-            blank.setCoordinates(topLeftX, topLeftY, bottomRightX, bottomRightY);
-            blankets.add(blank);
+                    bottomRightX = Math.max(cellBottomRightX, bottomRightX);
+                    bottomRightY = Math.max(cellBottomRightY, bottomRightY);
+
+                    topLeftX = Math.min(cellTopLeftX, topLeftX);
+                    topLeftY = Math.min(cellTopLeftY, topLeftY);
+                }
+                                
+                Iterator blanketIter = blank.getCoveredCells().iterator();
+                int numberOfCells = blank.getCoveredCells().size();
+        
+                //set all the cells' limits to the number of cells under this blanket
+                while(blanketIter.hasNext())
+                {
+                    Cell temp = (Cell) blanketIter.next();
+                    temp.setMaxMoveLimit(numberOfCells);
+                }
+
+                blank.setCoordinates(topLeftX, topLeftY, bottomRightX, bottomRightY);            
+                blank.setOwner(((Cell)blank.getCoveredCells().get(0)).getOwner());
+                blankets.add(blank);
+                
+            }           
+           
         }
         
-        //unmark all cells
-//        for(Cell cell: cells)
-//        {
-//            cell.unmark();
-//        }
-        
-        //merge all new blankets to maybe form bigger ones
-        Boolean didMerge = true;
-        while(didMerge)
-        {
-            didMerge = false;
-            
-            Iterator iterBlankOne = blankets.iterator();
-            Iterator iterBlankTwo = blankets.iterator();
-            Blanket blanketOne;
-            Blanket blanketTwo;
-            
-            
-            while(iterBlankOne.hasNext())
-            {
-                blanketOne = (Blanket) iterBlankOne.next();
-                while(iterBlankTwo.hasNext())
-                {
-                    blanketTwo = (Blanket) iterBlankTwo.next();
-                    if(!blanketTwo.equals(blanketOne))//possible issue
-                    {
-                        if(blanketOne.touches(blanketTwo))
-                        {
-                            blanketOne.merge(blanketTwo);
-                            blankets.remove(blanketTwo);//possible issue
-                            didMerge = true;
-                        }
-                    }
-                    if (didMerge)
-                        break;
-                }
-                if(didMerge)
-                    break;
-            }
+        for (Blanket blanket : blankets) {
+            System.out.println("Top Left:        " + blanket.getTopLeft().getX() + " ; " + blanket.getTopLeft().getY());
+            System.out.println("Bottom Right:    " + blanket.getBottomRight().getX() + " ; " + blanket.getBottomRight().getY());
+            System.out.println("Owner:           " + blanket.getOwner());
+            System.out.println("Cells moveLimit: " + ((Cell)blanket.getCoveredCells().get(0)).getMaxMoveLimit());
+            System.out.println();
+            System.out.println();            
         }
     }
    

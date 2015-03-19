@@ -18,18 +18,19 @@ public class CellWarsUI extends javax.swing.JFrame {
         DIMENSIONS = _dimensions;
         TOT_CELL_COUNT = _totCellCount;
         cells = new CellComponent[DIMENSIONS][DIMENSIONS];
-        this.setSize(getInsets().left + getInsets().right + CELL_WIDTH*DIMENSIONS,
-             getInsets().top + getInsets().bottom + CELL_HEIGHT*DIMENSIONS);
+        this.setSize(800,600);
         setLocationRelativeTo(null);               
     }
     
     public void initiliaseUI(Board board){
+        cellHeight = (this.getHeight() - this.getInsets().top - this.getInsets().bottom)/DIMENSIONS;
+        cellWidth = (this.getWidth() - this.getInsets().right - this.getInsets().left)/DIMENSIONS;
         for (int i=0; i < DIMENSIONS; ++i){
             for (int j=0; j < DIMENSIONS; ++j){
                 cells[i][j] = new CellComponent();
                 cells[i][j].setBackground(Color.WHITE);
-                cells[i][j].setLocation(i*CELL_WIDTH, j*CELL_HEIGHT);
-                cells[i][j].setSize(CELL_WIDTH, CELL_HEIGHT);
+                cells[i][j].setLocation(i*cellWidth, j*cellHeight);
+                cells[i][j].setSize(cellWidth, cellHeight);
                 cells[i][j].setVisible(true);                
                 this.getContentPane().add(cells[i][j]);
             }
@@ -38,8 +39,8 @@ public class CellWarsUI extends javax.swing.JFrame {
         this.addMouseListener(new CellWarsMouseAdapter(board){
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        int xIndex = (e.getX()- getInsets().left)/CELL_WIDTH;
-                        int yIndex = (e.getY()- getInsets().top)/CELL_HEIGHT;  
+                        int xIndex = (e.getX()- getInsets().left)/cellWidth;
+                        int yIndex = (e.getY()- getInsets().top)/cellHeight;  
                         b.acceptCoordinate(new Coordinate(xIndex, yIndex));                        
                     }                    
                 });
@@ -50,10 +51,16 @@ public class CellWarsUI extends javax.swing.JFrame {
         Iterator blanketIterator = board.getBlankets().iterator();
         Blanket currentBlanket;
         
+        for (int i = 0; i < DIMENSIONS; ++i){
+               for (int j = 0; j < DIMENSIONS; ++j){ 
+                    cells[i][j].setBackground(Color.WHITE);
+               }
+           }
+        
         while (blanketIterator.hasNext()){
            currentBlanket =  (Blanket) blanketIterator.next();
-           for (int i = currentBlanket.getTopLeft().getX(); i < currentBlanket.getBottomRight().getX(); ++i){
-               for (int j = currentBlanket.getTopLeft().getY(); j < currentBlanket.getBottomRight().getY(); ++j){ 
+           for (int i = currentBlanket.getTopLeft().getX(); i <= currentBlanket.getBottomRight().getX(); ++i){
+               for (int j = currentBlanket.getTopLeft().getY(); j <= currentBlanket.getBottomRight().getY(); ++j){ 
                     if (currentBlanket.getOwner().equals("p1"))
                         cells[i][j].setBackground(PLAYER1_BLANKET_COLOUR);
                     else
@@ -85,26 +92,35 @@ public class CellWarsUI extends javax.swing.JFrame {
     private void initComponents() {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                formComponentResized(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 2060, Short.MAX_VALUE)
+            .addGap(0, 999, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1219, Short.MAX_VALUE)
+            .addGap(0, 804, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
+        // TODO add your handling code here:
+    }//GEN-LAST:event_formComponentResized
+
     private final int GAME_MODE;
     private final int DIMENSIONS;
     private final int TOT_CELL_COUNT;
-    private final int CELL_HEIGHT = 100;
-    private final int CELL_WIDTH = 200;
+    private int cellHeight;
+    private int cellWidth;
     private final Color PLAYER1_CELL_COLOUR = Color.MAGENTA;
     private final Color PLAYER1_BLANKET_COLOUR = Color.PINK;
     private final Color PLAYER2_CELL_COLOUR = Color.BLUE;
