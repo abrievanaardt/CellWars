@@ -96,41 +96,41 @@ public class Board
         
         
         //intialise blanket array
-        for(Cell cell : cells)
-        {
-            Blanket temp = new Blanket();
-            cell.setMaxMoveLimit(1);
-            temp.add(cell);
-            temp.setOwner(cell.getOwner());
-            
-            int topx = cell.getCoordinate().getX();
-            int topy = cell.getCoordinate().getY();
-            
-            if(topx-1 >= 0)
-            {
-                topx = topx-1;
-            }
-            if(topy-1 >= 0)
-            {
-                topy = topy-1;
-            }
-            
-            int botx = cell.getCoordinate().getX();
-            int boty = cell.getCoordinate().getY();
-            
-            if(botx+1 < dimensions)
-            {
-                botx = botx + 1;
-            }
-            if(boty+1 < dimensions)
-            {
-                boty = boty + 1;
-            }
-            
-            temp.setCoordinates(topx,topy,botx,boty);
-            
-            blankets.add(temp);          
-        }
+//        for(Cell cell : cells)
+//        {
+//            Blanket temp = new Blanket();
+//            cell.setMaxMoveLimit(1);
+//            temp.add(cell);
+//            temp.setOwner(cell.getOwner());
+//            
+//            int topx = cell.getCoordinate().getX();
+//            int topy = cell.getCoordinate().getY();
+//            
+//            if(topx-1 >= 0)
+//            {
+//                topx = topx-1;
+//            }
+//            if(topy-1 >= 0)
+//            {
+//                topy = topy-1;
+//            }
+//            
+//            int botx = cell.getCoordinate().getX();
+//            int boty = cell.getCoordinate().getY();
+//            
+//            if(botx+1 < dimensions)
+//            {
+//                botx = botx + 1;
+//            }
+//            if(boty+1 < dimensions)
+//            {
+//                boty = boty + 1;
+//            }
+//            
+//            temp.setCoordinates(topx,topy,botx,boty);
+//            
+//            blankets.add(temp);          
+//        }
         
         identifyBlankets();
     }
@@ -286,14 +286,50 @@ public class Board
                 cell.addNeighboursToBlanket(cells, blank);
             }
             
+            Iterator coveredCells = blank.getCoveredCells().iterator();
+            //set all the cells' limits to the new number of cells under this blanket
+            while(coveredCells.hasNext())
+            {
+                Cell temp = (Cell) coveredCells.next();
+                temp.setMaxMoveLimit(blank.getCoveredCells().size());
+            }
+            
+            //determine new blanket size (coordinates)
+            Iterator cellsIter = blank.getCoveredCells().iterator();
+            int bottomRightX = -1;
+            int bottomRightY = -1;
+            int topLeftX = dimensions;
+            int topLeftY = dimensions;                    
+            int cellTopLeftX;
+            int cellTopLeftY;
+            int cellBottomRightX;
+            int cellBottomRightY;
+                    
+            Cell currentCell;
+            while (cellsIter.hasNext())
+            {
+                currentCell = (Cell) cellsIter.next();
+                cellTopLeftX = currentCell.getCoordinate().getX() == 0 ? 0 : currentCell.getCoordinate().getX()-1;
+                cellTopLeftY = currentCell.getCoordinate().getY() == 0 ? 0 : currentCell.getCoordinate().getY()-1;
+                cellBottomRightX = currentCell.getCoordinate().getX() == dimensions-1 ? dimensions-1 : currentCell.getCoordinate().getX()+1;
+                cellBottomRightY = currentCell.getCoordinate().getY() == dimensions-1 ? dimensions-1 : currentCell.getCoordinate().getY()+1;
+
+                bottomRightX = Math.max(cellBottomRightX, bottomRightX);
+                bottomRightY = Math.max(cellBottomRightY, bottomRightY);
+
+                topLeftX = Math.min(cellTopLeftX, topLeftX);
+                topLeftY = Math.min(cellTopLeftY, topLeftY);
+            }
+            
+            blank.setCoordinates(topLeftX, topLeftY, bottomRightX, bottomRightY);
             blankets.add(blank);
         }
         
         //unmark all cells
-        for(Cell cell: cells)
-        {
-            cell.unmark();
-        }
+//        for(Cell cell: cells)
+//        {
+//            cell.unmark();
+//        }
         
         //merge all new blankets to maybe form bigger ones
         Boolean didMerge = true;

@@ -1,3 +1,7 @@
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
 /**
  * Class to describe the cells owned by a player
  * @author Michelle Swanepoell 13066294
@@ -70,12 +74,37 @@ public class Cell
     
     public void addNeighboursToBlanket(Cell[] allCells, Blanket blanket)
     {
-        //implement
+        this.mark();
+        blanket.add(this);
+        ArrayList<Cell> n = this.getUnmarkedImmedNeigbours(allCells);
+        Iterator neighbours = n.iterator();
+        
+        while(neighbours.hasNext())
+        {
+           ((Cell)neighbours.next()).addNeighboursToBlanket(allCells, blanket);
+        }
+        
     }
     
-    public void getUnmarkedImmedNeigbours(Cell[] allCells)
+    public ArrayList<Cell> getUnmarkedImmedNeigbours(Cell[] allCells)
     {
-        //implement
+        Coordinate topLeftBorder = new Coordinate(this.getCoordinate().getX()-3, this.getCoordinate().getY()-3);
+        Coordinate bottomRightBorder = new Coordinate(this.getCoordinate().getX()+3, this.getCoordinate().getY()+3);
+        
+        ArrayList<Cell> result = new ArrayList<Cell>();    
+        for(Cell cell: allCells)
+        {
+            if(!cell.isMarked())
+            {
+                topLeftBorder = new Coordinate(cell.getCoordinate().getX()-3, cell.getCoordinate().getY()-3);
+                bottomRightBorder = new Coordinate(cell.getCoordinate().getX()+3, cell.getCoordinate().getY()+3);
+                if(cell.getCoordinate().compareTo(topLeftBorder) >= 0)
+                    if (cell.getCoordinate().compareTo(bottomRightBorder) <= 0)
+                        result.add(cell);
+            }
+        }
+        
+        return result;
     }
     
     /**

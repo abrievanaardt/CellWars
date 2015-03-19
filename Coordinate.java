@@ -65,5 +65,15 @@ public class Coordinate
         
         return false;
     }
+    
+    public int compareTo(Coordinate other)
+    {
+        if ((this.xCoord < other.xCoord) && (this.yCoord < other.yCoord))
+            return -1;
+        else if (this.equals(other))
+            return 0;
+        else
+            return 1;
+    }
 
 }
