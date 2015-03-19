@@ -1,6 +1,7 @@
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Random;
 
 /**
@@ -67,7 +68,7 @@ public class Board
             }
         }
         
-        for(int j = i; j < totCellCount/2; j++)
+        for(int j = i; j < totCellCount; j++)
         {
             placed = false;
             while(!placed)
@@ -296,16 +297,23 @@ public class Board
         {
             didMerge = false;
             
-            for(Blanket blanket: blankets)
+            Iterator iterBlankOne = blankets.iterator();
+            Iterator iterBlankTwo = blankets.iterator();
+            Blanket blanketOne;
+            Blanket blanketTwo;
+            
+            while(iterBlankOne.hasNext())
             {
-                for(Blanket blankie: blankets)
+                blanketOne = (Blanket) iterBlankOne.next();
+                while(iterBlankTwo.hasNext())
                 {
-                    if(!blankie.equals(blanket))//possible issue
+                    blanketTwo = (Blanket) iterBlankTwo.next();
+                    if(!blanketTwo.equals(blanketOne))//possible issue
                     {
-                        if(blanket.touches(blankie))
+                        if(blanketOne.touches(blanketTwo))
                         {
-                            blanket.merge(blankie);
-                            blankets.remove(blankie);//possible issue
+                            blanketOne.merge(blanketTwo);
+                            blankets.remove(blanketTwo);//possible issue
                             didMerge = true;
                         }
                     }

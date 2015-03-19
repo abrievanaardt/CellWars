@@ -19,6 +19,8 @@ public class Blanket
     public Blanket()
     {
         coveredCells = new ArrayList<Cell>();
+        topLeft = new Coordinate(0,0);
+        bottomRight = new Coordinate(0,0);
     }
     
     /**
