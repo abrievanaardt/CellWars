@@ -41,8 +41,9 @@ public class CellWarsUI extends javax.swing.JFrame {
                     @Override
                     public void mouseClicked(MouseEvent e) {
                         int xIndex = (e.getX()- getInsets().left)/CELL_WIDTH;
-                        int yIndex = (e.getY()- getInsets().top)/CELL_HEIGHT;                        
-                        b.acceptCoordinate(new Coordinate(xIndex, yIndex));                        
+                        int yIndex = (e.getY()- getInsets().top)/CELL_HEIGHT;  
+                        System.out.println(xIndex + " " + yIndex);
+                        //b.acceptCoordinate(new Coordinate(xIndex, yIndex));                        
                     }                    
                 });
         this.updateUI(board);

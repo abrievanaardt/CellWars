@@ -1,5 +1,3 @@
-package cellwars_frontend;
-
 import java.awt.Color;
 import java.awt.Graphics;
 import javax.swing.JPanel;
