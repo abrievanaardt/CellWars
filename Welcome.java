@@ -3,8 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cellwars_frontend;
-
 import javax.swing.SpinnerNumberModel;
 
 /**
@@ -158,7 +156,7 @@ public class Welcome extends javax.swing.JFrame {
         //This is the total cell count on the board
         int cellCount = 2* (int) cellCountSpinner.getModel().getValue();        
         CellWarsUI ui = new CellWarsUI(boardDimensions, cellCount, 0);
-        GameEngine gameEng = new GameEngine(ui);
+        GameEngine gameEng = new GameEngine(ui, boardDimensions, cellCount/2);
         gameEng.startGame();
         ui.setVisible(true);        
         this.dispose();

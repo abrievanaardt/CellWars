@@ -1,6 +1,5 @@
-package cellwars_frontend;
-
 import java.awt.Color;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.JPanel;
@@ -38,39 +37,13 @@ public class CellWarsUI extends javax.swing.JFrame {
             }
         }
         
-        this.addMouseListener(new MouseListener(){
-
+        this.addMouseListener(new CellWarsMouseAdapter(board){
                     @Override
                     public void mouseClicked(MouseEvent e) {
                         int xIndex = (e.getX()- getInsets().left)/CELL_WIDTH;
-                        int yIndex = (e.getY()- getInsets().top)/CELL_HEIGHT;
-                        
-                        board.acceptCoordinate(new Coordinate(xIndex, yIndex));
-                        
-                    }
-
-                    @Override
-                    public void mouseExited(MouseEvent e) {                 
-                    }
-
-                    @Override
-                    public void mouseReleased(MouseEvent e) {
-                        
-                    }
-
-                    @Override
-                    public void mouseEntered(MouseEvent e) {
-                        
-                    }
-
-                    @Override
-                    public void mousePressed(MouseEvent e) {
-                        
-                    }
-                    
-                    public void actionPerformed(MouseEvent e){
-                       
-                    }
+                        int yIndex = (e.getY()- getInsets().top)/CELL_HEIGHT;                        
+                        b.acceptCoordinate(new Coordinate(xIndex, yIndex));                        
+                    }                    
                 });
         this.updateUI(board);
     }
